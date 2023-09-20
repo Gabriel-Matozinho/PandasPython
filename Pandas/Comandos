@@ -16,7 +16,7 @@ df.head()
 
 Ex: df = pd.read_csv(“/contente/drive/ My Drive/Datasets/Gapminder.csv”, error_bad_lines=False, sep = “;”)    # Aqui no caso o separador era um ponto e vírgula.
  
-#3Renomear as colunas
+#Renomear as colunas
 
 df.rename(columns={“country”: ”Pais”, “contine”: “Continente”, “year” : “Ano”, “lifeExp”: “Expectativa de Vida”, “pop”: “População Total”, “gpfPerCap”: “PIB” }) #O parâmetro pede que seja feito em um dicionário, passando na estrutura o nome que está  no arquivo depois dois pontos : o nome que irá substituir nas colunas.
 
