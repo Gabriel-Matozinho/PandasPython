@@ -1,0 +1,161 @@
+#Códigos de Python para a biblioteca Pandas:
+
+##Importando a biblioteca pandas
+
+Import pandas as (colocar uma variável ex: ‘pd’)
+
+##Colocando o dataset dentro da variável e abrindo o arquivo csv com o comando  .read
+
+df = pd.read_csv(“colar o caminho do arquivo aqui”, ## Caso tenha erro nas linhas do arquivo usar a virgula após o caminho do arquivo e  a função error_bad_lines=False)
+  
+##Visualizando as 5 primeiras linhas, caso queira ver mais linhas é apenas colocar a quantidade dentro do ().
+
+df.head() 
+
+#3Por definição o Pandas lê os separadores com a Vírgula, porém se estiver outro separador no arquivo basta reconhecer qual é e usar o sep=”aqui vai o separador”
+
+Ex: df = pd.read_csv(“/contente/drive/ My Drive/Datasets/Gapminder.csv”, error_bad_lines=False, sep = “;”)    # Aqui no caso o separador era um ponto e vírgula.
+ 
+#3Renomear as colunas
+
+df.rename(columns={“country”: ”Pais”, “contine”: “Continente”, “year” : “Ano”, “lifeExp”: “Expectativa de Vida”, “pop”: “População Total”, “gpfPerCap”: “PIB” }) #O parâmetro pede que seja feito em um dicionário, passando na estrutura o nome que está  no arquivo depois dois pontos : o nome que irá substituir nas colunas.
+
+#3Total de Linhas e colunas do arquivo .shape
+
+df.shape
+ 
+#3Apenas o nomes das colunas
+
+df.columns
+
+#3Retornas os tipos dos dados de cada coluna dentro do arquivo: Object, int64, float64,datatime.
+
+df.dtypes 
+
+#3Mostrando as últimas 5 linhas do arquivo, caso queira ver mais linhas é apenas colocar a quantidade dentro do ().
+
+df.tail()
+#Usando a função .describe() irá retornar dados estatísticos do conjunto de dados, como a quantidade, a média, o máximo, mínimo, os quartis.
+
+df.describe()
+
+#Como filtrar os dados
+df[“continentes’].unique() 
+## Aqui irá aparecer todos os continentes dentro do conjunto de dados, vamos usar o continente Oceania para exemplificar mais funções.
+
+#Isolar apenas uma coluna
+Oceania = df.loc[df[“continente’] == “Oceania”]
+
+#Vai mostrar os 5 primeiras linhas do continente Oceania.
+Oceania.head ()
+
+
+#Agrupamento de dados
+##agrupar por continente, e saber quantos países tem em cada continente.
+
+df.groupby(“continente”)[‘Pais”].nunique ()			
+#a função .nunique ()  faz essa contagem distinta 
+
+
+# Como saber a expectativa média de vida para cada ano do conjunto de dados
+df.groupby(“Ano”)[“Expectativa de Vida”].mean()
+
+ # Saber a soma dos valores do PIB, usando o função .sum().
+df[“PIB”]. sum
+
+
+
+Trabalhando com planilhas Excel:
+
+#Importando a biblioteca
+
+Import pandas as pd
+
+#Leitura dos arquivos. Vão ser usada as variáveis: df1, df2, df3, df4, df5. Dentro dos () do pd.read_excel, será colocado o nome da planilha que irá sofrer o upload.
+df1 = pd.read_excel(“Aracaju.xlsx”)
+df2 = pd.read_excel(“Fortaleza.xlsx”)
+df3 = pd.read_excel(“Natal.xlsx”)
+df4 = pd.read_excel(“Recife.xlsx”)
+df5 = pd.read_execel(“Salvador.xlsx”)
+
+
+#Juntado/concatenando todos os arquivos. Função .concat
+df = pd.concat ([df1,df2,df3,df4,df5])
+
+#Exibindo s 5 primeiras linhas. Função .head.
+df.head()
+
+#Exibindo as 5 últimas linhas. Função .tail
+df.tail()
+
+#Verificando o tipo dado de cada coluna. Função .types
+df.types()
+
+#Alterando o tipo de dado da coluna LojaID
+df[“LojaID”] = df[“LojaID”].astype(“object”)
+
+#Pegando amostras do nosso conjunto de dados
+df.sample()  # dentro dos() se coloca a quantidade de linhas de amostras
+ 
+Tratando valores faltantes
+
+#Consultando linhas com valores faltantes
+df.isnull().sum()
+ # Essas funções irão somar a quantidade de valores faltantes, no caso do conjunto de dados, irá aparecer apenas na coluna Vendas
+
+#Substituindo os calores nulos pela média
+df[“Vendas”].fillna(df[“Vendas”].eman(), inplace=True)
+
+#Substituindo os valores nulos por zero
+df[“Vendas”].fillna(0, inplace=True)
+
+#Apagando as linhas com valores nulos
+df.dropna(inplace=True)
+
+#Apagando as linhas com valores nulos com base apenas em 1 coluna
+df.dropna(Subset=[“Vendas”], inplace = True)
+
+#Removendo linhas que estejam com valores faltantes em todas as colunas
+df.dropna(how= “all”, inplace =True)
+
+Criando colunas novas
+ 
+#Criando a colina de receita
+df[“Receita”] = df[“Vendas”].mul(df[“Qtde”])
+
+#Retornando a maior receita
+df[“Receita”].max()
+#Retornando a menor receita
+df[“Receita”].min()
+
+#O uso da Função nlargest, quando se passa a os parâmetros, quantidades (0,....9999999) e a coluna, irá mostrar os maiores.
+df.nlargest(3, “Receita”)
+
+#O uso da Função nsmallest, quando se passa os parâmetros, quantidades (0,....9999999) e a coluna, irá mostrar os menores.
+df.nsmallest(3, “Receita”)
+
+#Agrupando por cidade
+df.groupby(“Cidade”)[“Receita”].sum()
+
+#Ordenando o conjunto de dados
+df.sort_values(“Receita”, ascending=False).head(10)
+##Nesse caso o código irá retornar as 10 primeiras linhas da coluna receita em ordem das maiores receitas.
+
+
+
+Trabalhando com datas
+
+#Transformando a coluna de data em tipo inteiro
+df[“Data”] = df[“data”].astype(“int64”)
+
+#Verificando o tipo de dado de cada coluna
+df.dtypes
+
+#Transformando a coluna de data para o formato datetime
+df[“Data”] = pd.to_datatime(df[“Data”])
+
+#Agrupamento por ano
+df.groupby(df[“Data”].dt.year)[“Receita”].sum()
+
+#Criando um nova coluna com o ano
+df[“Ano_Venda”] = df[“Data”].dt.year
